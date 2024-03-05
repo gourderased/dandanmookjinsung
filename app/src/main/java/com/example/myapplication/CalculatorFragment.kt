@@ -8,14 +8,22 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.myapplication.databinding.ActivityMainBinding
+import com.example.myapplication.databinding.FragmentCalculatorBinding
 
 class CalculatorFragment : Fragment() {
 
+    // 바인딩 객체 선언
+    private lateinit var binding: FragmentCalculatorBinding    // 바인딩 객체에 접근
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         //어떤 뷰 사용?, 부모?, 자동으로 프래그먼트 추가해줄 것 인지?
-        return inflater.inflate(R.layout.fragment_calculator, container, false)
+        //return inflater.inflate(R.layout.fragment_calculator, container, false)
+
+        binding = FragmentCalculatorBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -29,13 +37,10 @@ class CalculatorFragment : Fragment() {
 
     //계산하기 버튼
     private fun setupCalculateButton(view: View) {
-        val buttonCalculate = view.findViewById<Button>(R.id.btn_num_calculate)
-
-        buttonCalculate.setOnClickListener {
+        binding.btnNumCalculate.setOnClickListener {
             val inputField = view.findViewById<EditText>(R.id.tv_num_input)
             val expression = inputField.text.toString()
             val (result, errorMessage) = calculateExpression(expression)
-
 
             errorMessage?.let{
                 Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
@@ -57,46 +62,45 @@ class CalculatorFragment : Fragment() {
 
     //클리어 버튼
     private fun setupDeleteAllButton(view: View) {
-        view.findViewById<Button>(R.id.btn_num_delete_all).setOnClickListener {
-            view.findViewById<EditText>(R.id.tv_num_input).text.clear()
+        binding.btnNumDeleteAll.setOnClickListener {
+            binding.tvNumInput.text.clear()
         }
     }
 
     //숫자 버튼들
     private fun setUpNumberAndOperatorButtons(view: View) {
-        val inputField = view.findViewById<EditText>(R.id.tv_num_input)
-        val buttons = listOf(
-            R.id.btn_num_zero,
-            R.id.btn_num_one,
-            R.id.btn_num_two,
-            R.id.btn_num_three,
-            R.id.btn_num_four,
-            R.id.btn_num_five,
-            R.id.btn_num_six,
-            R.id.btn_num_seven,
-            R.id.btn_num_eight,
-            R.id.btn_num_nine,
-            R.id.btn_num_add,
-            R.id.btn_num_subtract
+
+        val numberButtons = listOf(
+            binding.btnNumZero,
+            binding.btnNumOne,
+            binding.btnNumTwo,
+            binding.btnNumThree,
+            binding.btnNumFour,
+            binding.btnNumFive,
+            binding.btnNumSix,
+            binding.btnNumSeven,
+            binding.btnNumEight,
+            binding.btnNumNine
         )
 
-        buttons.forEach { buttonId ->
-            view.findViewById<Button>(buttonId).setOnClickListener { button ->
-                //button은 view타입임, Button클래스 속성 사용하려면 캐스팅 필요
-                val buttonText = (button as Button).text.toString()
-                val currentText = inputField.text.toString()
+        val operatorButtons = listOf(
+            binding.btnNumAdd,
+            binding.btnNumSubtract
+        )
 
-                //연산자 앞뒤로 공백 추가
-                if ((buttonText == "+" || buttonText == "-")) {
-                    //마지막 문자가 숫자일때만 추가
-                    if (currentText.isNotEmpty() && currentText.last().isDigit()) {
-                        inputField.append(" $buttonText ")
-                    }
+        numberButtons.forEach{ button ->
+            button.setOnClickListener {
+                binding.tvNumInput.append(button.text)
+            }
+        }
 
-                } else {
-                    inputField.append(buttonText)
+        operatorButtons.forEach { button ->
+            button.setOnClickListener {
+                val currentText = binding.tvNumInput.text.toString()
+                // 마지막 문자가 숫자일 때만 연산자 추가
+                if (currentText.isNotEmpty() && currentText.last().isDigit()) {
+                    binding.tvNumInput.append(" ${button.text} ")
                 }
-
             }
         }
     }
