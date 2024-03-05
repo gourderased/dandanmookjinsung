@@ -36,9 +36,10 @@ class CalculatorFragment : Fragment() {
             val expression = inputField.text.toString()
             val (result, errorMessage) = calculateExpression(expression)
 
-            if(errorMessage != null) {
+
+            errorMessage?.let{
                 Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-            } else if (result != null) {
+            } ?: run {
                 val resultFragment = CalculatorResultFragment()
                 //Bundle은 액티비티, 프래그먼트간 데이터 전달시 사용하는 자바에서의 map 키와 값쌍
                 val args = Bundle()
@@ -50,6 +51,7 @@ class CalculatorFragment : Fragment() {
                     .replace(R.id.frame_layout_calculator_and_result, resultFragment)
                     .addToBackStack(null).commit()
             }
+
         }
     }
 
