@@ -30,28 +30,26 @@ class CalculatorFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //view는 레이아웃에서 특정 뷰(버튼, 텍스트)를 찾을 때 사용하기 때문에 넘겨줘야함
-        setupCalculateButton(view)
-        setupDeleteAllButton(view)
-        setUpNumberAndOperatorButtons(view)
+        setupCalculateButton()
+        setupDeleteAllButton()
+        setUpNumberAndOperatorButtons()
     }
 
     //계산하기 버튼
-    private fun setupCalculateButton(view: View) {
+    private fun setupCalculateButton() {
         binding.btnNumCalculate.setOnClickListener {
-            val inputField = view.findViewById<EditText>(R.id.tv_num_input)
-            val expression = inputField.text.toString()
+
+            val expression = binding.tvNumInput.text.toString()
             val (result, errorMessage) = calculateExpression(expression)
 
             errorMessage?.let{
                 Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
             } ?: run {
-                val resultFragment = CalculatorResultFragment()
-                //Bundle은 액티비티, 프래그먼트간 데이터 전달시 사용하는 자바에서의 map 키와 값쌍
-                val args = Bundle()
-
-                args.putString("calculationResult", result.toString())
-                resultFragment.arguments = args
-
+                val resultFragment = CalculatorResultFragment().apply {
+                    arguments = Bundle().apply {
+                        putString("calculationResult", result.toString())
+                    }
+                }
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.frame_layout_calculator_and_result, resultFragment)
                     .addToBackStack(null).commit()
@@ -61,14 +59,14 @@ class CalculatorFragment : Fragment() {
     }
 
     //클리어 버튼
-    private fun setupDeleteAllButton(view: View) {
+    private fun setupDeleteAllButton() {
         binding.btnNumDeleteAll.setOnClickListener {
             binding.tvNumInput.text.clear()
         }
     }
 
     //숫자 버튼들
-    private fun setUpNumberAndOperatorButtons(view: View) {
+    private fun setUpNumberAndOperatorButtons() {
 
         val numberButtons = listOf(
             binding.btnNumZero,
