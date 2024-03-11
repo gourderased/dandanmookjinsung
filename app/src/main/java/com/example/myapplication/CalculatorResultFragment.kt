@@ -22,7 +22,7 @@ class CalculatorResultFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //args에서 계산결과 가져옴
         //?는 자바, 스유에서 옵셔널, null이면 default값으로 슛 -> 안전 호출 연산자라고 함
-        val result = arguments?.getString("calculationResult", "계산 결과 없음")
+        val result = arguments?.getString("result", "계산 결과 없음")
 
         view.findViewById<TextView>(R.id.tv_num_result).text = result
     }

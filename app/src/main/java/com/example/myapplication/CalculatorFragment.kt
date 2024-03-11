@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.myapplication.databinding.FragmentCalculatorBinding
 
 class CalculatorFragment : Fragment() {
@@ -42,16 +43,9 @@ class CalculatorFragment : Fragment() {
             errorMessage?.let{
                 Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
             } ?: run {
-                val resultFragment = CalculatorResultFragment().apply {
-                    arguments = Bundle().apply {
-                        putString("calculationResult", result.toString())
-                    }
-                }
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.frame_layout_calculator_and_result, resultFragment)
-                    .addToBackStack(null).commit()
+                val action = CalculatorFragmentDirections.actionCalculatorFragmentToCalculatorResultFragment(result.toString())
+                findNavController().navigate(action)
             }
-
         }
     }
 
