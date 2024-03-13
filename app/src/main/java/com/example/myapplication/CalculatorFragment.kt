@@ -40,10 +40,13 @@ class CalculatorFragment : Fragment() {
             val expression = binding.tvNumInput.text.toString()
             val (result, errorMessage) = calculateExpression(expression)
 
-            errorMessage?.let{
+            errorMessage?.let {
                 Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
             } ?: run {
-                val action = CalculatorFragmentDirections.actionCalculatorFragmentToCalculatorResultFragment(result.toString())
+                val action =
+                    CalculatorFragmentDirections.actionCalculatorFragmentToCalculatorResultFragment(
+                        result.toString()
+                    )
                 findNavController().navigate(action)
             }
         }
@@ -77,7 +80,7 @@ class CalculatorFragment : Fragment() {
             binding.btnNumSubtract
         )
 
-        numberButtons.forEach{ button ->
+        numberButtons.forEach { button ->
             button.setOnClickListener {
                 binding.tvNumInput.append(button.text)
             }
@@ -97,7 +100,7 @@ class CalculatorFragment : Fragment() {
     //식 계산
     private fun calculateExpression(expression: String): Pair<Double?, String?> {
         //수식이 비어있는지 확인
-        if(expression.isBlank()) {
+        if (expression.isBlank()) {
             return Pair(null, "수식이 비어있습니다.")
         }
 
@@ -105,7 +108,7 @@ class CalculatorFragment : Fragment() {
         val tokens = expression.split(" ")
             .filter { it.isNotEmpty() }
 
-        if(tokens.last().let { it == "+" || it == "-" }) {
+        if (tokens.last().let { it == "+" || it == "-" }) {
             return Pair(null, "수식이 연산자로 끝납니다.")
         }
 

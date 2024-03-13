@@ -13,7 +13,7 @@ class TodoAdapter(private val todos: List<Todo>) :
 
     //로그의 태그를 정의함, 알아보기 쉽게!! 범위는 클래스까지
     companion object {
-        private const val TAG = "TodoAdapter";
+        private const val TAG = "TodoAdapter"
     }
 
     //ViewHolder 생성하는 함수, 최소 생성 횟수만큼만 호출됨 (계속 호출 X)
@@ -53,10 +53,10 @@ class TodoAdapter(private val todos: List<Todo>) :
     class TodoViewHolder(private val binding: ItemTodoBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-            //투두 아이템들 받아와서 데이터 설정
+        //투두 아이템들 받아와서 데이터 설정
         fun bind(todo: Todo) {
-            binding.tvTodoTitle.text = todo.title;
-            binding.cbTodo.isChecked = todo.completed;
+            binding.tvTodoTitle.text = todo.title
+            binding.cbTodo.isChecked = todo.completed
         }
     }
 }
