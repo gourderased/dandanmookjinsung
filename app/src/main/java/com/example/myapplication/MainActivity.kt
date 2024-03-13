@@ -2,6 +2,8 @@ package com.example.myapplication
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.example.myapplication.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -13,32 +15,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.homeNavigation.run {
-            setOnItemSelectedListener {item ->
-                when (item.itemId) {
-                    R.id.navigation_home -> {
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.frame_layout_calculator_and_result, HomeFragment())
-                            .addToBackStack(null)
-                            .commitAllowingStateLoss()
-                    }
-                    R.id.navigation_calculator -> {
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.frame_layout_calculator_and_result, CalculatorFragment())
-                            .addToBackStack(null)
-                            .commitAllowingStateLoss()
-                    }
-                    R.id.navigation_my_page -> {
-                        supportFragmentManager.beginTransaction()
-                            .replace(R.id.frame_layout_calculator_and_result, MyPageFragment())
-                            .addToBackStack(null)
-                            .commitAllowingStateLoss()
-                    }
-                }
+        // NavHostFragment 찾고 NavController 가져옴
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.main_frag) as NavHostFragment
+        val navController = navHostFragment.navController
 
-                true
-            }
-            selectedItemId = R.id.navigation_home
-        }
+        //바텀 네비게이션뷰와 NavController를 연결
+        binding.bottomNavigationView.setupWithNavController(navController)
     }
 }
